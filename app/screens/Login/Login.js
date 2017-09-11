@@ -27,6 +27,11 @@ class Login extends Component {
             error: "",
             loading: false
         };
+        AsyncStorage.getItem('access_token').then((value) => {
+            if (value) {
+                this.props.navigation.navigate("Tabs");
+            } 
+        });
     }
 
     _loginFacebook() {   

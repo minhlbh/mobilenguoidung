@@ -132,6 +132,18 @@ var accountApi = {
             alert(e)
         })
 
+    },
+    createFastProfile(name, birth, gender,token){
+        var url = `${apiUrl.taoMoiNhanhHoSo}?HoVaTen=${name}&NamSinh=${birth}&GioiTinh=${gender}`;
+        return fetch(url,{
+            method: 'POST',
+            headers:{
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `bearer ${token}` 
+            }
+        }).then((response) => response.json()).catch((e) => {
+            alert(e)
+        })
     }
 };
 
