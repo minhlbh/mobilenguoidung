@@ -44,6 +44,7 @@ class Service extends Component {
                 alert(KetQua)
             }else{
                 this.props.navigation.navigate('DoctorInfo', {
+                    ketQua:KetQua,
                     idDichVu: state.params.id,
                     doctorId: UserId
                 });
