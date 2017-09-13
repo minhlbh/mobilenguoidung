@@ -59,11 +59,19 @@ class Home extends Component {
         return (
             <Container>
                 <Header style={styles.header}>
-                    <Left />
+                    <Left >
+                        <TouchableOpacity>
+                            <Icon style={styles.icon} name='settings' />
+                        </TouchableOpacity>
+                    </Left>
                     <Body>
-                        <Title>Trang chủ</Title>
+                        <Title style={styles.icon}>Trang chủ</Title>
                     </Body>
-                    <Right />
+                    <Right>
+                        <TouchableOpacity>
+                            <Icon style={styles.icon} name='md-notifications' />
+                        </TouchableOpacity>
+                    </Right>
                 </Header>
                 <Content >
                     <View style={styles.panel1}>

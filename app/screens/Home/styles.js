@@ -12,10 +12,10 @@ export default StyleSheet.create({
         // paddingLeft: 15,
         backgroundColor: '#0c879a'
     },
-    textPanel1:{
+    textPanel1: {
         alignSelf: 'center',
-        color:'#999',
-        fontSize:12,
+        color: '#999',
+        fontSize: 12,
         fontWeight: 'bold'
     },
     itemImage: {
@@ -29,24 +29,28 @@ export default StyleSheet.create({
         color: '#999',
         fontWeight: 'bold',
     },
-    header:{
-        backgroundColor: '#0f9cb3'
+    header: {
+        backgroundColor: colors.header.background
     },
-    panel2:{
-        backgroundColor:'#f2f2f2'
+    panel2: {
+        backgroundColor: '#f2f2f2'
     },
-    button:{
+    button: {
         width: 250,
         height: 80,
-        backgroundColor:'#0c879a',
-        marginTop:20,
-        alignSelf:'center',
+        backgroundColor: '#0c879a',
+        marginTop: 20,
+        alignSelf: 'center',
         marginBottom: 20
     },
-    col:{
-        borderLeftWidth:1,
-        borderRightWidth:1,
-        borderColor:'#f2f2f2',
-        justifyContent:'center'
-    }
+    col: {
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderColor: '#f2f2f2',
+        justifyContent: 'center'
+    },
+    icon:{
+        color: colors.header.text,
+        alignSelf:'center'
+    },
 })
