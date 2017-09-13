@@ -1,6 +1,4 @@
 import signalr from 'react-native-signalr';
-import EventEmitter from 'EventEmitter';
-
 
 export default class SignalService {
     static instance = null;
@@ -21,15 +19,9 @@ export default class SignalService {
                  console.log('Failed');
              });
         }
-
-       
         //receives broadcast messages from a hub function, called "helloApp"
        
         // atempt connection, and handle errors
-        
-    
-     
-
         return this.instance;
     }
 

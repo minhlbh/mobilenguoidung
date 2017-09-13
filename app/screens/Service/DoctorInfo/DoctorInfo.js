@@ -16,8 +16,8 @@ class DoctorInfo extends Component {
             alert(TraLoi);
             //Here I could response by calling something else on the server...
         });
-
     }
+
     inviteDoctor(idDichVu, doctorId, roomId){
         SignalService.proxy.invoke('moiBacSi', idDichVu,doctorId,roomId)
         .done((directResponse) => {
@@ -26,6 +26,7 @@ class DoctorInfo extends Component {
             console.warn('Something went wrong when calling server, it might not be up and running?')
         });
     }
+    
     render(){
         const {state} = this.props.navigation;
         return(
