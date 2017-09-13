@@ -30,13 +30,20 @@ class Service extends Component {
           picture: '',
           vanDe: '',
         };
+
+        //get các hồ sơ sức khỏe của account
         AsyncStorage.getItem('access_token').then((value) => {
-            console.log(value);
             serviceApi.getProfiles(value).then((res) => this.setState(
                  { DsHoSo: res.accountSoYBa.DsHoSoSucKhoe}
             ))
         });
 
+        SignalService.proxy.on('nguoiDungVaoDichVu_CapSoIdPhong', (IdPhong) => {
+            console.log('message-from-server-nguoiDungVaoDichVu_CapSoIdPhong:', IdPhong);
+        });
+    }
+
+    componentWillMount() {
         const {state} = this.props.navigation;
         SignalService.proxy.on('timBacSi_KetQua', (KetQua, UserId) => {
             console.log('message-from-server', KetQua, UserId);
@@ -49,10 +56,19 @@ class Service extends Component {
                     doctorId: UserId
                 });
             }
-            //Here I could response by calling something else on the server...
         });
-    }
 
+       
+
+        SignalService.proxy.invoke('nguoiDungVaoDichVu', state.params.id)
+        .done((directResponse) => {
+            console.log('direct-response-from-server-nguoiDungVaoDichVu', directResponse);
+           
+        }).fail(() => {
+            console.warn('Something went wrong when calling server, it might not be up and running?')
+        });
+        
+    }
     findDoctor(){
         var id = this.props.navigation.state.params.id;
         var idHoSo = this.state.selectedHoso;
@@ -69,53 +85,9 @@ class Service extends Component {
             console.warn('Something went wrong when calling server, it might not be up and running?')
         });
        
-
-        // const connection = signalr.hubConnection('http://admincloud.truongkhoa.com/SignalR');
-        // connection.logging = true;
-    
-        // const proxy = connection.createHubProxy('truongKhoaHub');
-        // //receives broadcast messages from a hub function, called "helloApp"
-        // proxy.on('timBacSi_KetQua', (KetQua, UserId) => {
-        //   console.log('message-from-server', KetQua, UserId);
-        //   //Here I could response by calling something else on the server...
-        // });
-    
-        // // atempt connection, and handle errors
-        // connection.start().done(() => {
-        //     var notify = new EventEmitter();
-        //     notify.emit('daKetNoi','Đã kết nối thành công');
-
-        //   console.log('Now connected, connection ID=' + connection.id);
-    
-        //   proxy.invoke('timBacSi', id,idHoSo,isAnonymous,vanDe,linkAnh)
-        //     .done((directResponse) => {
-        //       console.log('direct-response-from-server', directResponse);
-        //     }).fail(() => {
-        //       console.warn('Something went wrong when calling server, it might not be up and running?')
-        //     });
-    
-        // }).fail(() => {
-        //     console.log('Failed');
-        // });
-    
-        // //connection-handling
-        // connection.connectionSlow(() => {
-        //      console.log('We are currently experiencing difficulties with the connection.')
-        // });
-    
-        // connection.error((error) => {
-        //     const errorMessage = error.message;
-        //     let detailedError = '';
-        //     if (error.source && error.source._response) {
-        //         detailedError = error.source._response;
-        //     }
-        //     if (detailedError === 'An SSL error has occurred and a secure connection to the server cannot be made.') {
-        //         console.log('When using react-native-signalr on ios with http remember to enable http in App Transport Security https://github.com/olofd/react-native-signalr/issues/14')
-        //     }
-        //     console.debug('SignalR error: ' + errorMessage, detailedError)
-        // });
     }
 
+    // chọn hồ sơ
     onValueChange(value) {
         const {state} = this.props.navigation;
         if(value == 'taohoso'){
@@ -129,11 +101,13 @@ class Service extends Component {
         });
     }
 
+    // chọn ẩn danh hay không
     onValueChange2(value) {
         this.setState({
             isAnonymous: value
         });
     }
+
     render(){
         const {state} = this.props.navigation;
         return(
@@ -149,6 +123,7 @@ class Service extends Component {
                     </Body>
                     <Right/>
                 </Header>
+
                 <Content>
                 <Form style= {styles.form}>
                     <Picker

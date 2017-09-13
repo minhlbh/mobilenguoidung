@@ -20,25 +20,36 @@ import {
 import accountApi from '../../api/accountApi';
 import styles from './styles';
 import homeApi from '../../api/homeApi';
-console.disableYellowBox = true;
+import SignalService from '../../Share/SignalService';
+import User from '../../Share/User';
 
+console.disableYellowBox = true;
+var u = new User();
 class Home extends Component {
     constructor(props){
         super(props);
         this.state = {
-            username: '',
-            email: '',
-            avatar: '',
-            phone: '',
+            username: u.getHoVaTen(),
+            email: User.email,
+            avatar: User.avatar,
+            phone: User.phone,
             ListDichVu: [],
         };
-        AsyncStorage.getItem('access_token').then((value) => {
+        // AsyncStorage.getItem('access_token').then((value) => {
             
-                accountApi.getUserInfo(value).then((res) => this.setState(
-                        { email: res.Email, username: res.HoVaTen,avatar: res.Avata, phone: res.Phone}
-                    ))
+        //         accountApi.getUserInfo(value).then((res) => {this.setState(
+        //                 { email: res.Email, username: res.HoVaTen,avatar: res.Avata, phone: res.Phone}
+        //             )
+        //             SignalService.proxy.invoke('nguoiDungKhaiBaoUserName', res.Email)
+        //             .done((directResponse) => {
+        //                 console.log('direct-response-from-server', directResponse);
+                       
+        //             }).fail(() => {
+        //                 console.warn('Something went wrong when calling server, it might not be up and running?')
+        //             });
+        //         })
       
-        })
+        // })
     }
 
     componentWillMount() {

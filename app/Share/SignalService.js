@@ -13,6 +13,8 @@ export default class SignalService {
             // connection.logging = true;
             this.proxy.on('timBacSi_KetQua', () => {});
             this.proxy.on('moiBacSi_BacSiTraLoi', () => {});
+            this.proxy.on('nguoiDungVaoDichVu_CapSoIdPhong',  () => {});
+
             this.connection.start().done(() => {
                 console.log(this.connection.id);
              }).fail(() => {
