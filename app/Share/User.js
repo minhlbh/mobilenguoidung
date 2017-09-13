@@ -1,32 +1,36 @@
+import 'rxjs';
+import { Observable} from 'rxjs/Observable';
+import accountApi from '../api/accountApi';
+import {AsyncStorage} from 'react-native';
 
+var u = new Observable();
 
 export default class User {
-    hoVaTen = '';
+    idPhong = '';
+
     constructor (){
         if(!User.instance){
             User.instance = this;   
+            u =  Observable.fromPromise(
+                AsyncStorage.getItem('access_token').then((value) => {
+                    return accountApi.getUserInfo(value).then((res) => {
+                        return res;
+                    })
+                })
+             );
         }
         return User.instance;
     }
 
-    setHoVaTen(name){
-        this.hoVaTen = name;
+    getUser(){
+        return u;
     }
 
-    getHoVaTen(){
-        return this.hoVaTen;
-    }
-    static getUserInfo(){
-        console.log(this.hoVaTen);
-        return this.hoVaTen;
-    }
-    clearUser(){
-        this.accessToken = null;
-        this.name = null;
-        this.email = null;
-        this.avatar = null;
-        this.phone = null;
-        this.address = null;
+    setIdPhong(id){
+        this.idPhong = id;
     }
 
+    getIdPhong(){
+        return this.idPhong;
+    }
 }

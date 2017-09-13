@@ -7,6 +7,8 @@ import {
     Text
 } from 'native-base';
 import SignalService from '../../../Share/SignalService';
+import User from '../../../Share/User';
+var u = new User();
 
 class DoctorInfo extends Component {
     constructor(props){
@@ -16,6 +18,8 @@ class DoctorInfo extends Component {
             alert(TraLoi);
             //Here I could response by calling something else on the server...
         });
+
+        console.log(u.getIdPhong());
     }
 
     inviteDoctor(idDichVu, doctorId, roomId){

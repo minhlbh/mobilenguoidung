@@ -14,7 +14,8 @@ var apiUrl = {
     userInfo:`${domain}api/Account/UserInfo`,
     listDichVu :`${domain}api/CSDLYT/DichVu_List`,
     listHoSoSucKhoe: `${domain}api/BADT/HoSoSucKhoe_List`,
-    taoMoiNhanhHoSo: `${domain}api/BADT/HoSoSucKhoe_Create_Fast`
+    taoMoiNhanhHoSo: `${domain}api/BADT/HoSoSucKhoe_Create_Fast`,
+    uploadImg: `${domain}api/DD/UploadImg`,
 }
 
 

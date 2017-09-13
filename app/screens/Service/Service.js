@@ -11,14 +11,26 @@ import {
     Label,
     Text
 } from 'native-base';
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, Image } from 'react-native';
 import styles from './styles';
 import serviceApi from '../../api/serviceApi';
 import signalr from 'react-native-signalr';
-import EventEmitter from 'EventEmitter';
 import SignalService from '../../Share/SignalService';
+import User from '../../Share/User';
+var u = new User();
+var ImagePicker = require('react-native-image-picker');
 
 
+var options = {
+    title: 'Select Avatar',
+    customButtons: [
+      {name: 'fb', title: 'Choose Photo from Facebook'},
+    ],
+    storageOptions: {
+      skipBackup: true,
+      path: 'images'
+    }
+  };
 class Service extends Component {
     
     constructor(props) {
@@ -29,6 +41,7 @@ class Service extends Component {
           DsHoSo: [],
           picture: '',
           vanDe: '',
+          imageSource: '',
         };
 
         //get các hồ sơ sức khỏe của account
@@ -57,11 +70,23 @@ class Service extends Component {
                 });
             }
         });
+        
+        var email = '';
+        u.getUser().subscribe(rs => {
+           email= rs.Email;
+        })
 
-       
+        SignalService.proxy.invoke('nguoiDungKhaiBaoUserName', email)
+            .done((directResponse) => {
+                console.log('direct-response-from-server', directResponse);
+                       
+            }).fail(() => {
+                console.warn('Something went wrong when calling server, it might not be up and running?')
+            });
 
         SignalService.proxy.invoke('nguoiDungVaoDichVu', state.params.id)
         .done((directResponse) => {
+            u.setIdPhong(directResponse);
             console.log('direct-response-from-server-nguoiDungVaoDichVu', directResponse);
            
         }).fail(() => {
@@ -107,7 +132,34 @@ class Service extends Component {
             isAnonymous: value
         });
     }
-
+    
+    pickImage() {
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+          
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+              let source = { uri: response.uri };
+          
+              // You can also display the image using data:
+              // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+          
+              this.setState({
+                imageSource: source
+              });
+            }
+        });
+    }
+    
+    
     render(){
         const {state} = this.props.navigation;
         return(
@@ -156,7 +208,12 @@ class Service extends Component {
                          onChangeText={(vanDe) => this.setState({ vanDe })}
                         />
                     </Item>
-
+                    <Button full primary style={{marginTop: 10}}
+                    onPress={()=> this.pickImage()}
+                    >
+                        <Text>Chọn ảnh</Text>
+                    </Button>
+                    <Image source={this.state.imageSource} style={{height: 200, width: 200}} />
                     <Button full primary style={{marginTop: 10}}
                         onPress={()=> this.findDoctor()}
                     >

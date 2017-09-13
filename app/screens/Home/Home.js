@@ -29,22 +29,25 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: u.getHoVaTen(),
+            username: '',
             email: User.email,
             avatar: User.avatar,
             phone: User.phone,
             ListDichVu: [],
         };
-        // AsyncStorage.getItem('access_token').then((value) => {
-
-        //     accountApi.getUserInfo(value).then((res) => this.setState(
-        //         { email: res.Email, username: res.HoVaTen, avatar: res.Avata, phone: res.Phone }
-        //     ))
-
-        // })
+      
     }
 
     componentWillMount() {
+        u.getUser().subscribe(rs => {
+            console.log("lay thong tin user:", rs)
+            this.setState({
+                username: rs.HoVaTen,
+                email: rs.Email,
+                avatar: rs.Avatar,
+                phone: rs.Phone,
+            });
+        })
         homeApi.getListDichVu().then((res) => {
             this.setState({ ListDichVu: res.DsDichVu });
         })

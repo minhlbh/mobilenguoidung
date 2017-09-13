@@ -20,6 +20,23 @@ export default class SignalService {
              }).fail(() => {
                  console.log('Failed');
              });
+
+             //connection-handling
+            this.connection.connectionSlow(() => {
+                console.log('We are currently experiencing difficulties with the connection.')
+            });
+  
+            this.connection.error((error) => {
+                const errorMessage = error.message;
+                let detailedError = '';
+                if (error.source && error.source._response) {
+                detailedError = error.source._response;
+                }
+                if (detailedError === 'An SSL error has occurred and a secure connection to the server cannot be made.') {
+                console.log('When using react-native-signalr on ios with http remember to enable http in App Transport Security https://github.com/olofd/react-native-signalr/issues/14')
+                }
+                console.debug('SignalR error: ' + errorMessage, detailedError)
+            });
         }
         //receives broadcast messages from a hub function, called "helloApp"
        
