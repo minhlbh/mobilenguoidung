@@ -1,35 +1,35 @@
-import React, {Component} from 'react';
-import {  TabNavigator } from "react-navigation";
+import React, { Component } from 'react';
+import { TabNavigator } from "react-navigation";
 import HomeStack from './HomeStack';
-import {Icon} from 'native-base';
+import { Icon } from 'native-base';
 
 const Tabs = TabNavigator({
   Home: {
     screen: HomeStack,
     navigationOptions: {
       tabBarLabel: 'Home',
-      tabBarIcon: ({ tintColor }) => <Icon name="md-home"  style={{ color: tintColor }} />
+      tabBarIcon: ({ tintColor }) => <Icon name="md-home" style={{ color: tintColor }} />
     },
   },
   Doctor: {
     screen: HomeStack,
     navigationOptions: {
       tabBarLabel: 'Home',
-      tabBarIcon: ({ tintColor }) => <Icon name="md-home"  style={{ color: tintColor }} />
+      tabBarIcon: ({ tintColor }) => <Icon name="md-home" style={{ color: tintColor }} />
     },
   },
   Lockup: {
     screen: HomeStack,
     navigationOptions: {
       tabBarLabel: 'Home',
-      tabBarIcon: ({ tintColor }) => <Icon name="md-home"  style={{ color: tintColor }} />
+      tabBarIcon: ({ tintColor }) => <Icon name="md-home" style={{ color: tintColor }} />
     },
   },
-   Person: {
+  Person: {
     screen: HomeStack,
     navigationOptions: {
       tabBarLabel: 'Home',
-      tabBarIcon: ({ tintColor }) => <Icon name="md-home"  style={{ color: tintColor }} />
+      tabBarIcon: ({ tintColor }) => <Icon name="md-home" style={{ color: tintColor }} />
     },
   },
 }, {
@@ -40,16 +40,16 @@ const Tabs = TabNavigator({
       showIcon: true,
       style: {
         backgroundColor: '#FFF',
-        paddingTop:0,
+        paddingTop: 0,
         height: 60
       },
       labelStyle: {
         fontSize: 11,
       },
-      indicatorStyle:{
+      indicatorStyle: {
         backgroundColor: '#0f9cb3',
       },
     }
   });
 
-  export default Tabs;
+export default Tabs;

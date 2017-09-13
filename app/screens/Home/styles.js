@@ -10,10 +10,13 @@ export default StyleSheet.create({
         // paddingLeft: 15,
         // paddingRight: 15,
         // paddingLeft: 15,
-        backgroundColor: '#2A8FBD'
+        backgroundColor: '#0c879a'
     },
-    textPanel1:{
-        alignSelf: 'center'
+    textPanel1: {
+        alignSelf: 'center',
+        color: '#999',
+        fontSize: 12,
+        fontWeight: 'bold'
     },
     itemImage: {
         width: 150,
@@ -24,6 +27,30 @@ export default StyleSheet.create({
         marginTop: 8,
         marginBottom: 8,
         color: '#999',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+    },
+    header: {
+        backgroundColor: colors.header.background
+    },
+    panel2: {
+        backgroundColor: '#f2f2f2'
+    },
+    button: {
+        width: 250,
+        height: 80,
+        backgroundColor: '#0c879a',
+        marginTop: 20,
+        alignSelf: 'center',
+        marginBottom: 20
+    },
+    col: {
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderColor: '#f2f2f2',
+        justifyContent: 'center'
+    },
+    icon:{
+        color: colors.header.text,
+        alignSelf:'center'
     },
 })

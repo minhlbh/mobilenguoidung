@@ -29,60 +29,61 @@ class Login extends Component {
             loading: false
         };
         AsyncStorage.getItem('access_token').then((value) => {
+            console.log(value);
             if (value) {
                 this.props.navigation.navigate("Tabs");
-            } 
+            }
         });
     }
 
-    _loginFacebook() {   
+    _loginFacebook() {
         this.setState({ loading: true });
         LoginManager.logInWithReadPermissions(['email']).then(
-            function(result) {
-              if (result.isCancelled) {
-                alert('Đăng nhập được huỷ');
-              } else {
-                AccessToken.getCurrentAccessToken().then(
-                    (data) => {
-                        fetch(`https://graph.facebook.com/me?fields=email&&access_token=${data.accessToken.toString()}`)
-                        .then((response) => response.json())
-                        .then((res) => {
-                            accountApi.checkFacebookLogin(data.userID, res.email, data.accessToken.toString()).then(response =>{
-                                console.log(response);
-                                if(response == 'Email chưa được dùng đăng kí tài khoản nào!'){
-                                    this.props.navigation.navigate("InputPhone", {
-                                        id: data.userID,
-                                        email: res.email,
-                                        token: data.accessToken.toString()
-                                    });
-                                }else if (response.access_token){
-                                    this.props.navigation.navigate("Tabs");
-                                    AsyncStorage.setItem('access_token', response.access_token);
-                                    alert('Đăng nhập thành công với facebook');
-                                } else {
-                                    alert(response);
-                                    
-                                };      
-                            }).catch((error) => {
-                                alert(error)
-                                
-                            })                 
-                        })                    
-                    }
-                )             
-              }
-              
+            function (result) {
+                if (result.isCancelled) {
+                    alert('Đăng nhập được huỷ');
+                } else {
+                    AccessToken.getCurrentAccessToken().then(
+                        (data) => {
+                            fetch(`https://graph.facebook.com/me?fields=email&&access_token=${data.accessToken.toString()}`)
+                                .then((response) => response.json())
+                                .then((res) => {
+                                    accountApi.checkFacebookLogin(data.userID, res.email, data.accessToken.toString()).then(response => {
+                                        console.log(response);
+                                        if (response == 'Email chưa được dùng đăng kí tài khoản nào!') {
+                                            this.props.navigation.navigate("InputPhone", {
+                                                id: data.userID,
+                                                email: res.email,
+                                                token: data.accessToken.toString()
+                                            });
+                                        } else if (response.access_token) {
+                                            this.props.navigation.navigate("Tabs");
+                                            AsyncStorage.setItem('access_token', response.access_token);
+                                            alert('Đăng nhập thành công với facebook');
+                                        } else {
+                                            alert(response);
+
+                                        };
+                                    }).catch((error) => {
+                                        alert(error)
+
+                                    })
+                                })
+                        }
+                    )
+                }
+
             },
-            function(error) {
-              alert('Đăng nhập xảy ra lỗi: ' + error);
-              this.setState({ loading: false });
+            function (error) {
+                alert('Đăng nhập xảy ra lỗi: ' + error);
+                this.setState({ loading: false });
             },
             this.setState({ loading: false })
         )
-        
-        
+
+
     }
-     
+
 
     login = () => {
         this.setState({ loading: true });
@@ -106,7 +107,7 @@ class Login extends Component {
         return (
             <Container style={styles.container}>
                 <Content scrollEnabled={false}>
-                
+
                     <View style={styles.logoContainer}>
                         <Image source={images.logo} style={styles.logoImage} />
                         <Text style={styles.logoText}> Trưởng Khoa </Text>
@@ -156,26 +157,26 @@ class Login extends Component {
                             </Button>
                             <Button bordered
                                 style={styles.btnRegister}
-                                //onPress={() => this.props.navigation.navigate('Signup')}
+                            //onPress={() => this.props.navigation.navigate('Signup')}
                             >
                                 <Text style={styles.textRegister}>Đăng kí</Text>
                             </Button>
                         </View>
                         <Button transparent
                             style={styles.btnTransparent}
-                            //onPress={() => this.props.navigation.navigate("ForgetPass")}
+                        //onPress={() => this.props.navigation.navigate("ForgetPass")}
                         >
                             <Text style={{ color: colors.light }}>Quên mật khẩu ?</Text>
                         </Button>
 
-                        
-                        <Button  transparent
-                             style={styles.btnTransparent}
-                            //onPress={() => this._loginFacebook()}
+
+                        <Button transparent
+                            style={styles.btnTransparent}
+                        //onPress={() => this._loginFacebook()}
                         >
                             <Icon style={styles.iconFace} name='logo-facebook' />
-                        </Button>                        
-                       
+                        </Button>
+
                     </View>
                 </Content>
             </Container>
