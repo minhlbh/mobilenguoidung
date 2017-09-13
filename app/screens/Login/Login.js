@@ -28,6 +28,7 @@ class Login extends Component {
             loading: false
         };
         AsyncStorage.getItem('access_token').then((value) => {
+            console.log(value);
             if (value) {
                 this.props.navigation.navigate("Tabs");
             } 
