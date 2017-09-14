@@ -14,26 +14,25 @@ var serviceApi = {
             alert(e)
         })
     },
-    uploadImg(){
+    uploadImg(source){
         var data = new FormData();
-        data.append('picture', {uri: PicturePath, name: 'selfie.jpg', type: 'image/jpg'});
+        data.append('file', source);
 
         // Create the config object for the POST
         // You typically have an OAuth2 token that you use for authentication
         const config = {
+            body: data,   
          method: 'POST',
          headers: {
            'Accept': 'application/json',
            'Content-Type': 'multipart/form-data;',
-           'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
+           //'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
          },
-         body: data,
+         
         }
 
-        fetch(apiUrl.uploadImg, config)
-         .then((response) => response.json()).catch((e) => {
-            alert(e)
-        })
+        return fetch(apiUrl.uploadImg, config)
+        .then((response) => response.json())
     }
 }
 

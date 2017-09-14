@@ -148,10 +148,12 @@ class Service extends Component {
             }
             else {
               let source = { uri: response.uri };
-          
+             
               // You can also display the image using data:
               // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-          
+                serviceApi.uploadImg(source).then((res) => {
+                    console.log(res);
+                })
               this.setState({
                 imageSource: source
               });
