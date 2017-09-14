@@ -9,7 +9,8 @@ import {
     Item,
     Input,
     Label,
-    Text
+    Text,
+    View
 } from 'native-base';
 import {AsyncStorage, Image } from 'react-native';
 import styles from './styles';
@@ -151,7 +152,7 @@ class Service extends Component {
              
               // You can also display the image using data:
               // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-                serviceApi.uploadImg(source).then((res) => {
+                serviceApi.uploadImg(response).then((res) => {
                     console.log(res);
                 })
               this.setState({
@@ -215,7 +216,10 @@ class Service extends Component {
                     >
                         <Text>Chọn ảnh</Text>
                     </Button>
-                    <Image source={this.state.imageSource} style={{height: 200, width: 200}} />
+                    <View>
+                          <Image source={this.state.imageSource} style={{height: 100, width: 100}} />
+                    
+                    </View>
                     <Button full primary style={{marginTop: 10}}
                         onPress={()=> this.findDoctor()}
                     >
