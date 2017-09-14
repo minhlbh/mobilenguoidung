@@ -51,6 +51,5 @@ export default StyleSheet.create({
     },
     icon:{
         color: colors.header.text,
-        alignSelf:'center'
-    },
+    }
 })

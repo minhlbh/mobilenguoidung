@@ -3,6 +3,7 @@ import { StackNavigator, } from "react-navigation";
 import Service from '../screens/Service';
 import TaoNhanhHoSo from '../screens/HoSo/TaoNhanhHoSo';
 import DoctorInfo from '../screens/Service/DoctorInfo';
+import TestDoctorInfo from '../screens/Service/TestUI/TestDoctorInfo'
 
 export default (ServiceStack = StackNavigator({
     Service: {
@@ -21,6 +22,12 @@ export default (ServiceStack = StackNavigator({
         screen: DoctorInfo,
         navigationOptions: {
             header: null
+        }
+    },
+    TestDoctorInfo:{
+        screen: TestDoctorInfo,
+        navigationOptions:{
+            header:null
         }
     }
 }));
