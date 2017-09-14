@@ -174,7 +174,7 @@ class Service extends Component {
                                 />
                             }
                             <Body>
-                                <Picker style={styles.picker1}
+                                <Picker //style={styles.picker1}
                                     mode="dropdown"
                                     placeholder="Select One"
                                     selectedValue={this.state.selectedHoso}
@@ -193,7 +193,7 @@ class Service extends Component {
 
                         </ListItem>
                         <Picker
-                            style={styles.picker2}
+                            //style={styles.picker2}
                             mode="dropdown"
                             placeholder="Select One"
                             selectedValue={this.state.isAnonymous}
