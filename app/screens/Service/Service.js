@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-    Container, Header, Left, Body, Right, Content,
+    Container, Header, Left, Body, Right, Content, ListItem, Thumbnail,
     Button,
     Icon,
     Title,
@@ -33,22 +33,31 @@ var options = {
     }
   };
 class Service extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
-          selectedHoso: undefined,
-          isAnonymous : true,
-          DsHoSo: [],
-          picture: '',
-          vanDe: '',
-          imageSource: '',
+            selectedHoso: undefined,
+            isAnonymous: true,
+            DsHoSo: [],
+            picture: '',
+            vanDe: '',
+            name: '',
+            birth: '',
+            gender: '',
+
         };
 
         //get các hồ sơ sức khỏe của account
         AsyncStorage.getItem('access_token').then((value) => {
             serviceApi.getProfiles(value).then((res) => this.setState(
-                 { DsHoSo: res.accountSoYBa.DsHoSoSucKhoe}
+                {
+                    DsHoSo: res.accountSoYBa.DsHoSoSucKhoe,
+                    avatar: res.accountSoYBa.DsHoSoSucKhoe.Avatar,
+                    name: res.accountSoYBa.DsHoSoSucKhoe.HoVaTen,
+                    birth: res.accountSoYBa.DsHoSoSucKhoe.NgaySinh,
+                    gender: res.accountSoYBa.DsHoSoSucKhoe.GioiTinh
+                }
             ))
         });
 
@@ -61,11 +70,11 @@ class Service extends Component {
         const {state} = this.props.navigation;
         SignalService.proxy.on('timBacSi_KetQua', (KetQua, UserId) => {
             console.log('message-from-server', KetQua, UserId);
-            if(!UserId){
+            if (!UserId) {
                 alert(KetQua)
-            }else{
+            } else {
                 this.props.navigation.navigate('DoctorInfo', {
-                    ketQua:KetQua,
+                    ketQua: KetQua,
                     idDichVu: state.params.id,
                     doctorId: UserId
                 });
@@ -115,9 +124,9 @@ class Service extends Component {
 
     // chọn hồ sơ
     onValueChange(value) {
-        const {state} = this.props.navigation;
-        if(value == 'taohoso'){
-            this.props.navigation.navigate('TaoNhanhHoSo',{
+        const { state } = this.props.navigation;
+        if (value == 'taohoso') {
+            this.props.navigation.navigate('TaoNhanhHoSo', {
                 id: state.params.id,
                 name: state.params.name
             });
@@ -167,50 +176,70 @@ class Service extends Component {
         const {state} = this.props.navigation;
         return(
             <Container>
-                <Header>
+                <Header style={styles.header}>
                     <Left>
                         <Button transparent onPress={() => this.props.navigation.navigate('Tabs')}>
                             <Icon name="ios-arrow-back" />
                         </Button >
                     </Left>
                     <Body>
-                        <Title>{state.params.name}</Title>
+                        <Title style={styles.textHeader}>{state.params.name}</Title>
                     </Body>
-                    <Right/>
+                    <Right />
                 </Header>
 
                 <Content>
-                <Form style= {styles.form}>
-                    <Picker
-                        mode="dropdown"
-                        placeholder="Select One"
-                        selectedValue={this.state.selectedHoso}
-                        onValueChange={this.onValueChange.bind(this)}
-                    >
-                        <Item label="Chọn hồ sơ" value="key0" />
-                        <Item label="Tạo nhanh hồ sơ mới" value="taohoso" />
-                    {this.state.DsHoSo.map((item) => (
-                        <Item label={item.HoVaTen} value={item.Id}/>
-                    ))}
-                    </Picker>
-                    <Picker
-                        style= {{marginTop: 10}}
-                        mode="dropdown"
-                        placeholder="Select One"
-                        selectedValue={this.state.isAnonymous}
-                        onValueChange={this.onValueChange2.bind(this)}
-                    >
-                        <Item label="Ẩn danh khi gặp bác sĩ" value={true} />
-                        <Item label="Xưng danh khi gặp bác sĩ" value={false} />
-                    </Picker>
+                    <View style={styles.panel1}>
+                        <ListItem>
+                            {this.state.avatar ?
+                                <Thumbnail large source={{ uri: this.state.avatar }}
+                                /> :
+                                <Thumbnail large style={{ marginRight: 20, marginLeft: 20 }} source={{ uri: 'http://www.unl.edu/careers/images/staff_images/y_u_no_photo_Square.png' }}
+                                />
+                            }
+                            <Body>
+                                <Picker //style={styles.picker1}
+                                    mode="dropdown"
+                                    placeholder="Select One"
+                                    selectedValue={this.state.selectedHoso}
+                                    onValueChange={this.onValueChange.bind(this)}
+                                >
+                                    <Item label="Chọn hồ sơ" value="key0" />
+                                    <Item label="Tạo nhanh hồ sơ mới" value="taohoso" />
+                                    {this.state.DsHoSo.map((item) => (
+                                        <Item label={item.HoVaTen} value={item.Id} />
+                                    ))}
+                                </Picker>
+                                <Text style={styles.textHeader}>Họ và tên: Đỗ Thành Phúc</Text>
+                                <Text style={styles.textHeader}>Ngày sinh: 17/11/1997</Text>
+                                <Text style={styles.textHeader}>Giới tính: Nam</Text>
+                            </Body>
 
-                    <Item regular style= {{marginTop: 10}} >
-                        <Input style={{height: 200}}
-                         multiline={true} 
-                         placeholder='Nhập vấn đề bạn gặp phải' 
-                         onChangeText={(vanDe) => this.setState({ vanDe })}
-                        />
-                    </Item>
+                        </ListItem>
+                        <Picker
+                            //style={styles.picker2}
+                            mode="dropdown"
+                            placeholder="Select One"
+                            selectedValue={this.state.isAnonymous}
+                            onValueChange={this.onValueChange2.bind(this)}
+                        >
+                            <Item label="Ẩn danh khi gặp bác sĩ" value={true} />
+                            <Item label="Xưng danh khi gặp bác sĩ" value={false} />
+                        </Picker>
+                    </View>
+                    <View style={{ marginTop: 35, }}>
+                        <Item style={{ alignSelf: 'center', }}>
+                            <Text style={styles.text}>Lời nhắn tới bác sĩ</Text>
+                        </Item>
+                        <Item>
+                            <Input
+                                style={styles.input}
+                                multiline={true}
+                                placeholder='Text area..'
+                                onChangeText={(vanDe) => this.setState({ vanDe })}
+                            />
+                        </Item>
+                    </View>
                     <Button full primary style={{marginTop: 10}}
                     onPress={()=> this.pickImage()}
                     >
@@ -218,14 +247,13 @@ class Service extends Component {
                     </Button>
                     <View>
                           <Image source={this.state.imageSource} style={{height: 100, width: 100}} />
-                    
+                     
                     </View>
-                    <Button full primary style={{marginTop: 10}}
-                        onPress={()=> this.findDoctor()}
+                    <Button style={styles.button}
+                        onPress={() => this.findDoctor()}
                     >
-                        <Text> Tìm bác sĩ </Text>
+                        <Text>Tìm bác sĩ</Text>
                     </Button>
-                </Form>
                 </Content>
             </Container>
         )
