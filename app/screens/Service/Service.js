@@ -15,7 +15,6 @@ import {
 import {AsyncStorage, Image } from 'react-native';
 import styles from './styles';
 import serviceApi from '../../api/serviceApi';
-import signalr from 'react-native-signalr';
 import SignalService from '../../Share/SignalService';
 import User from '../../Share/User';
 var u = new User();
@@ -38,6 +37,7 @@ class Service extends Component {
         super(props);
         this.state = {
             selectedHoso: undefined,
+            idHoSo: '',
             isAnonymous: true,
             DsHoSo: [],
             picture: '',
@@ -45,7 +45,6 @@ class Service extends Component {
             name: '',
             birth: '',
             gender: '',
-
         };
 
         //get các hồ sơ sức khỏe của account
@@ -53,26 +52,20 @@ class Service extends Component {
             serviceApi.getProfiles(value).then((res) => this.setState(
                 {
                     DsHoSo: res.accountSoYBa.DsHoSoSucKhoe,
-                    avatar: res.accountSoYBa.DsHoSoSucKhoe.Avatar,
-                    name: res.accountSoYBa.DsHoSoSucKhoe.HoVaTen,
-                    birth: res.accountSoYBa.DsHoSoSucKhoe.NgaySinh,
-                    gender: res.accountSoYBa.DsHoSoSucKhoe.GioiTinh
                 }
             ))
-        });
-
-        SignalService.proxy.on('nguoiDungVaoDichVu_CapSoIdPhong', (IdPhong) => {
-            console.log('message-from-server-nguoiDungVaoDichVu_CapSoIdPhong:', IdPhong);
         });
     }
 
     componentWillMount() {
         const {state} = this.props.navigation;
+
+        // Nếu signalR trả về có bác sĩ thì chuyển sang trang thông tin bác sĩ
         SignalService.proxy.on('timBacSi_KetQua', (KetQua, UserId) => {
             console.log('message-from-server', KetQua, UserId);
-            if (!UserId) {
+            if (!UserId) { //Nếu k có id bác sĩ trả về thì báo kết quả 
                 alert(KetQua)
-            } else {
+            } else { //Nếu có chuyển sang trang bác sĩ
                 this.props.navigation.navigate('DoctorInfo', {
                     ketQua: KetQua,
                     idDichVu: state.params.id,
@@ -81,43 +74,48 @@ class Service extends Component {
             }
         });
         
+        //Lấy email từ User() 
         var email = '';
         u.getUser().subscribe(rs => {
            email= rs.Email;
         })
 
+        //Invoke lên server signalR để khai báo người dùng
         SignalService.proxy.invoke('nguoiDungKhaiBaoUserName', email)
             .done((directResponse) => {
                 console.log('direct-response-from-server', directResponse);
-                       
+                //Xong => invoke người dùng vào dịch vụ => trả về id phòng và id cuộc gặp
+                SignalService.proxy.invoke('nguoiDungVaoDichVu', state.params.id)
+                .done((directResponse) => {
+                    var res = JSON.parse(directResponse);
+                    u.setIdPhong(res.IdPhong); 
+                    u.setIdGap(res.IdGap);
+                    console.log('direct-response-from-server-nguoiDungVaoDichVu', directResponse);
+                }).fail((e) => {
+                    console.warn('Vao dich vu loi',e)
+                });        
             }).fail(() => {
                 console.warn('Something went wrong when calling server, it might not be up and running?')
             });
 
-        SignalService.proxy.invoke('nguoiDungVaoDichVu', state.params.id)
-        .done((directResponse) => {
-            u.setIdPhong(directResponse);
-            console.log('direct-response-from-server-nguoiDungVaoDichVu', directResponse);
-           
-        }).fail(() => {
-            console.warn('Something went wrong when calling server, it might not be up and running?')
-        });
+       
         
     }
     findDoctor(){
         var id = this.props.navigation.state.params.id;
-        var idHoSo = this.state.selectedHoso;
+        var idHoSo = this.state.idHoSo;
         var isAnonymous = this.state.isAnonymous;
         var vanDe = this.state.vanDe;
-        var linkAnh = this.state.picture;
-        
+        var idPhong = u.getIdPhong();
+        var idGap = u.getIdGap();
       
-        SignalService.proxy.invoke('timBacSi', id,idHoSo,isAnonymous,vanDe,linkAnh)
+        console.log(idGap);
+        SignalService.proxy.invoke('timBacSi', id,idHoSo,isAnonymous,vanDe,idPhong,idGap)
         .done((directResponse) => {
             console.log('direct-response-from-server', directResponse);
            
         }).fail(() => {
-            console.warn('Something went wrong when calling server, it might not be up and running?')
+            console.warn('Tim bac si loi!!')
         });
        
     }
@@ -132,7 +130,12 @@ class Service extends Component {
             });
         }
         this.setState({
-            selectedHoso: value
+            selectedHoso: value,
+            idHoSo: value.idHoSo,
+            name: value.HoVaTen,
+            avatar: value.Avatar,
+            gender: value.GioiTinh,
+            birth: value.NgaySinh,
         });
     }
 
@@ -157,16 +160,30 @@ class Service extends Component {
               console.log('User tapped custom button: ', response.customButton);
             }
             else {
-              let source = { uri: response.uri };
-             
               // You can also display the image using data:
               // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+              //upload ảnh lên server qua api
                 serviceApi.uploadImg(response).then((res) => {
                     console.log(res);
+
+                    //chỉ lấy tên ảnh
+                    var image = res.location.replace('https://sharinglife.blob.core.windows.net/images/','');
+                    
+                    //up tên ảnh lên signalR 
+                    SignalService.proxy.invoke('upAnh',image ,u.getIdGap())
+                    .done((directResponse) => {
+                        console.log('direct-response-from-server-upAnh', directResponse);
+                    }).fail((e) => {
+                        console.warn('up anh loi',e)
+                    });        
                 })
-              this.setState({
-                imageSource: source
-              });
+
+                //render ảnh 
+                let source = { uri: response.uri };
+                this.setState({
+                    imageSource: source
+                });
             }
         });
     }
@@ -192,7 +209,7 @@ class Service extends Component {
                     <View style={styles.panel1}>
                         <ListItem>
                             {this.state.avatar ?
-                                <Thumbnail large source={{ uri: this.state.avatar }}
+                                <Thumbnail large style={{ marginRight: 20, marginLeft: 20 }} source={{ uri: this.state.avatar }}
                                 /> :
                                 <Thumbnail large style={{ marginRight: 20, marginLeft: 20 }} source={{ uri: 'http://www.unl.edu/careers/images/staff_images/y_u_no_photo_Square.png' }}
                                 />
@@ -204,15 +221,15 @@ class Service extends Component {
                                     selectedValue={this.state.selectedHoso}
                                     onValueChange={this.onValueChange.bind(this)}
                                 >
+                                    {this.state.DsHoSo.map((item) => (
+                                        <Item label={item.HoVaTen} value={item} />
+                                    ))}
                                     <Item label="Chọn hồ sơ" value="key0" />
                                     <Item label="Tạo nhanh hồ sơ mới" value="taohoso" />
-                                    {this.state.DsHoSo.map((item) => (
-                                        <Item label={item.HoVaTen} value={item.Id} />
-                                    ))}
                                 </Picker>
-                                <Text style={styles.textHeader}>Họ và tên: Đỗ Thành Phúc</Text>
-                                <Text style={styles.textHeader}>Ngày sinh: 17/11/1997</Text>
-                                <Text style={styles.textHeader}>Giới tính: Nam</Text>
+                                <Text style={styles.textHeader}>Họ và tên: {this.state.name}</Text>
+                                <Text style={styles.textHeader}>Ngày sinh: {this.state.birth.substring(0,10)}</Text>
+                                <Text style={styles.textHeader}>Giới tính: {this.state.gender}</Text>
                             </Body>
 
                         </ListItem>

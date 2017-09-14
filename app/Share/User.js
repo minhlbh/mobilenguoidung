@@ -7,6 +7,7 @@ var u = new Observable();
 
 export default class User {
     idPhong = '';
+    idGap = '';
 
     constructor (){
         if(!User.instance){
@@ -32,5 +33,14 @@ export default class User {
 
     getIdPhong(){
         return this.idPhong;
+    }
+
+    
+    setIdGap(id){
+        this.idGap = id;
+    }
+
+    getIdGap(){
+        return this.idGap;
     }
 }
