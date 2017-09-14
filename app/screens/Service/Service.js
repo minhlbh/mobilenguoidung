@@ -12,6 +12,7 @@ import {
     Text,
     View
 } from 'native-base';
+
 import { AsyncStorage } from 'react-native';
 import styles from './styles';
 import serviceApi from '../../api/serviceApi';
