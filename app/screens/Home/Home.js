@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { TouchableOpacity, Image, FlatList, AsyncStorage } from 'react-native';
+import { TouchableOpacity, Image, FlatList } from 'react-native';
 import {
     Container, Header, Left, Body, Right, Content,
     Text,
@@ -15,7 +15,6 @@ import {
     Title,
     Grid,
     Col,
-    Fab
 } from 'native-base';
 import accountApi from '../../api/accountApi';
 import styles from './styles';
@@ -30,9 +29,9 @@ class Home extends Component {
         super(props);
         this.state = {
             username: '',
-            email: User.email,
-            avatar: User.avatar,
-            phone: User.phone,
+            email: '',
+            avatar:'',
+            phone: '',
             ListDichVu: [],
         };
       
@@ -40,7 +39,6 @@ class Home extends Component {
 
     componentWillMount() {
         u.getUser().subscribe(rs => {
-            console.log("lay thong tin user:", rs)
             this.setState({
                 username: rs.HoVaTen,
                 email: rs.Email,
@@ -114,7 +112,7 @@ class Home extends Component {
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.col}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() =>this.props.navigation.navigate('History')}>
                                         <Text style={styles.textPanel1}>5</Text>
                                         <Text style={styles.textPanel1}>Lịch sử</Text>
                                     </TouchableOpacity>

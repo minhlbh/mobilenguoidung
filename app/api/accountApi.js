@@ -1,6 +1,7 @@
-import apiUrl from '../config/api';
+import api from '../config/api';
 import { AsyncStorage } from "react-native";
 import postFormBody from './postFormBody';
+var apiUrl = api.account;
 
 var accountApi = {
     getToken(user, pass) {
@@ -139,6 +140,17 @@ var accountApi = {
             method: 'POST',
             headers:{
                 // 'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `bearer ${token}` 
+            }
+        }).then((response) => response.json()).catch((e) => {
+            alert(e)
+        })
+    },
+    listHistory(token){
+        var url = `${apiUrl.history}`;
+        return fetch(url,{
+            method: 'POST',
+            headers:{
                 'Authorization': `bearer ${token}` 
             }
         }).then((response) => response.json()).catch((e) => {

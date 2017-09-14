@@ -1,6 +1,7 @@
-import apiUrl from '../config/api';
+import api from '../config/api';
 import postFormBody from './postFormBody';
 import RNFetchBlob from 'react-native-fetch-blob';
+var apiUrl = api.service;
 
 var serviceApi = {
     getProfiles(token) {

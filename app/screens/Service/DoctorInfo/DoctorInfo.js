@@ -19,7 +19,7 @@ class DoctorInfo extends Component {
             //Here I could response by calling something else on the server...
         });
 
-        console.log(u.getIdPhong());
+        console.log('********************************',u.getIdPhong());
     }
 
     inviteDoctor(idDichVu, doctorId, roomId){

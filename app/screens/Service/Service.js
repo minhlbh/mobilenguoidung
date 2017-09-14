@@ -12,7 +12,7 @@ import {
     Text,
     View
 } from 'native-base';
-import {AsyncStorage, Image } from 'react-native';
+import { Image } from 'react-native';
 import styles from './styles';
 import serviceApi from '../../api/serviceApi';
 import SignalService from '../../Share/SignalService';
@@ -48,13 +48,11 @@ class Service extends Component {
         };
 
         //get các hồ sơ sức khỏe của account
-        AsyncStorage.getItem('access_token').then((value) => {
-            serviceApi.getProfiles(value).then((res) => this.setState(
-                {
-                    DsHoSo: res.accountSoYBa.DsHoSoSucKhoe,
-                }
-            ))
-        });
+        serviceApi.getProfiles(u.getToken()).then((res) => this.setState(
+            {
+                DsHoSo: res.accountSoYBa.DsHoSoSucKhoe,
+            }
+        ))
     }
 
     componentWillMount() {
@@ -131,7 +129,7 @@ class Service extends Component {
         }
         this.setState({
             selectedHoso: value,
-            idHoSo: value.idHoSo,
+            idHoSo: value.Id,
             name: value.HoVaTen,
             avatar: value.Avatar,
             gender: value.GioiTinh,

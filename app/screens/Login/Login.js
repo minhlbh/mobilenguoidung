@@ -18,6 +18,7 @@ import accountApi from '../../api/accountApi';
 // import Loading from '../../components/loading';
 // import FBSDK, { LoginManager , AccessToken, LoginButton} from 'react-native-fbsdk';
 import User from '../../Share/User';
+var u = new User();
 
 class Login extends Component {
     constructor(props) {
@@ -28,10 +29,10 @@ class Login extends Component {
             error: "",
             loading: false
         };
-        AsyncStorage.getItem('access_token').then((value) => {
-            console.log(value);
-            if (value) {
+        AsyncStorage.getItem('access_token').then((token) => {
+            if (token) {
                 this.props.navigation.navigate("Tabs");
+                u.setToken(token);
             }
         });
     }
@@ -95,6 +96,7 @@ class Login extends Component {
             if (res.access_token) {
                 this.props.navigation.navigate("Tabs");
                 AsyncStorage.setItem('access_token', res.access_token); 
+                new User();
             } else {
                 this.setState({ error: "Sai tên số điện thoại hoặc mật khẩu" });
                 alert('Sai tên số điện thoại hoặc mật khẩu');

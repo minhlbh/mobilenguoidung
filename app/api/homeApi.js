@@ -1,5 +1,6 @@
-import apiUrl from '../config/api';
+import api from '../config/api';
 import postFormBody from './postFormBody';
+var apiUrl = api.home;
 
 var homeApi = {
     getListDichVu() {
