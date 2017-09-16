@@ -27,7 +27,6 @@ export default StyleSheet.create({
     },
     text:{
         color: colors.header.text,
-        backgroundColor:'#0c879a'
     },
     input:{
         height:150, 

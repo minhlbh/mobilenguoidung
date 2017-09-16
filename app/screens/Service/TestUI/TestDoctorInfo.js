@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Container, Header, Left, Body, Right, Content, ListItem, Thumbnail,
+    Container, Header, Left, Body, Right, Content, ListItem, Thumbnail, List,
     Button,
     Icon,
     Title,
@@ -15,10 +15,10 @@ import {
 import styles from './styles'
 
 export default class TestDoctorInfo extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            avatar:''
+        this.state = {
+            avatar: ''
         }
     }
     render() {
@@ -35,46 +35,52 @@ export default class TestDoctorInfo extends Component {
                     </Body>
                     <Right />
                 </Header>
-                <Content>
-                    <View style={{alignSelf:'center',marginTop:40}}>
-                    {this.state.avatar ?
-                        <Thumbnail large source={{ uri: this.state.avatar }}
-                        /> :
-                        <Thumbnail large style={{ marginRight: 20, marginLeft: 20 }} source={{ uri: 'http://www.unl.edu/careers/images/staff_images/y_u_no_photo_Square.png' }}
-                        />
-                    }
+                <Content style={styles.content}>
+                    <View>
+                        <Label style={{ width: 70, alignSelf: 'center', marginTop: 20 }}>
+                            <Text style={{ color: '#0c879a' }}>BÁC SĨ{'\n'}</Text>
+                            <Text style={{ alignSelf: 'center', marginTop: 10, color: '#0c879a',fontWeight:'bold' }}>Lê Bá Hồng Minh</Text>
+                        </Label>
+                        <View style={{ alignSelf: 'center', marginTop: 10, marginBottom: 20 }}>
+                            {this.state.avatar ?
+                                <Thumbnail large source={{ uri: this.state.avatar }}
+                                /> :
+                                <Thumbnail large style={{ width: 130, height: 130 }} source={{ uri: 'https://sharinglife.blob.core.windows.net/images/file_453faac4-2ca1-4c2f-ae96-9e9f86f6cf36.jpg' }}
+                                />
+                            }
+                            
+                        </View>
                     </View>
-                    <View style={{marginLeft:30, marginRight:30}}>
+                    <View style={{ marginLeft: 30, marginRight: 30, backgroundColor: '#f2f2f2' }}>
                         <Item style={{}}>
-                            <Label>
-                    <Text>Bác sĩ:</Text>
-                    </Label>
-                    <ListItem>
-                    <Text>Lê Bá Hồng Minh</Text>
-                    </ListItem>
-                    </Item>
-                    <Item style={{}}>
-                        <Label>
-                    <Text>Giới  thiệu:</Text>
-                    </Label>
-                    <ListItem>
-                    <Text>Chuyên khoa Ung Bướu</Text>
-                    <Text>bệnh viện Y Học Cổ Truyền</Text>
-                    </ListItem>
-                    </Item>
-                    <Item style={{}}>
-                        <Label>
-                    <Text>Giá lượt gặp:</Text>
-                    </Label>
-                    <ListItem>
-                    <Text>100000đ</Text>
-                    </ListItem>
-                    </Item>
+                            <Label style={{ width: 70 }}>
+                                <Text>GIỚI THIỆU:</Text>
+                            </Label>
+                            <ListItem><Text style={styles.text}>Chuyên khoa Ung Bướu, {'\n'}
+                                bệnh viện Y Học Cổ Truyền</Text>
+                            </ListItem>
+                        </Item>
+                        <Item style={{}}>
+                            <Label style={{ width: 70 }}>
+                                <Text>GIÁ LƯỢT GẶP:</Text>
+                            </Label>
+                            <ListItem>
+                                <Text style={styles.text}>100000đ</Text>
+                            </ListItem>
+                        </Item>
                     </View>
-                    
-                    <Button style={{marginTop:40, alignSelf:'center'}}>
-                        <Text>Mời bác sĩ</Text>
-                    </Button>
+                    <Item>
+                        <Left>
+                            <Button style={{ backgroundColor: 'green' }}>
+                                <Text style={{ color: 'white' }}>Mời bác sĩ</Text>
+                            </Button>
+                        </Left>
+                        <Right>
+                            <Button style={{ backgroundColor: 'red' }}>
+                                <Text style={{ color: 'white' }}>Bỏ qua</Text>
+                            </Button>
+                        </Right>
+                    </Item>
                 </Content>
             </Container>
         )

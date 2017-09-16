@@ -204,9 +204,11 @@ class Service extends Component {
                         </Picker>
                     </View>
                     <View style={{ marginTop: 35, }}>
+                        <View style={styles.header}>
                         <Item style={{ alignSelf: 'center', }}>
                             <Text style={styles.text}>Lời nhắn tới bác sĩ</Text>
                         </Item>
+                        </View>
                         <Item>
                             <Input
                                 style={styles.input}
